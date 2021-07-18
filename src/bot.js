@@ -1,8 +1,7 @@
 require('dotenv').config()
 const log = require('./util/logger')
 const Discord = require('discord.js')
-const ethers = require('ethers')
-const { initListeners } = require('./events/listeners')
+const { initSchedules } = require('./events/schedule')
 const { initPresence } = require('./events/presence')
 
 // Get token
@@ -15,41 +14,27 @@ if (!TOKEN) {
 }
 
 // Prepare env vars
-const PREFIX = process.env.PREFIX || '#'
-log.info(`Prefix is ${PREFIX}`)
 const {
-	INFURA_PROJECT_ID,
-	INFURA_PROJECT_SECRET,
 	CHANNEL_ID,
 } = process.env
-if (!INFURA_PROJECT_ID || !INFURA_PROJECT_SECRET) {
-	log.error(
-		'Running without Infura API details. You will not be able to do anything on chain',
-	)
-}
 if (!CHANNEL_ID) {
-	log.error('Running without channel ID.')
+	log.error('No channel ID. Exiting')
+	process.exit(1)
 }
 
 // Spin up bot
 const bot = new Discord.Client()
-const provider = new ethers.providers.InfuraProvider(
-	'homestead',
-	INFURA_PROJECT_ID,
-)
-provider.ready.then(() => {
-	log.info('Infura provider is ready')
-})
 bot.on('ready', async () => {
 	log.info('Discord login successful!')
+
+	const channel = await bot.channels.fetch(CHANNEL_ID)
 
 	// Initialise discord presence
 	initPresence(bot)
 	// Initialise listeners
-	initListeners(bot)
+	initSchedules(channel)
 	log.info('Codex initialised')
 
-	const channel = await bot.channels.fetch(CHANNEL_ID)
 	channel.send("Codex initialised")
 })
 
@@ -64,7 +49,7 @@ bot.on('message', message => {
 	}
 
 	if (message.content === "ping") {
-		message.send("pong")
+		message.channel.send("pong")
 	}
 })
 
