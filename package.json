@@ -1,0 +1,49 @@
+{
+  "name": "codex-parallel-bot",
+  "version": "1.0.0",
+  "description": "Codex - A discord bot for Parallel",
+  "main": "src/bot.js",
+  "repository": "https://github.com/ScreamingHawk/codex-parallel-bot.git",
+  "author": {
+    "name": "Michael Standen",
+    "email": "michael@standen.link",
+    "url": "https://michael.standen.link"
+  },
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "pm2 start pm2.config.js",
+    "logs": "pm2 logs Codex",
+    "stop": "pm2 stop Codex",
+    "delete": "pm2 delete Codex",
+    "lint": "eslint **.js",
+    "lint:fix": "eslint --fix **.js && prettier --write **.js"
+  },
+  "dependencies": {
+    "discord.js": "^12.4.1",
+    "dotenv": "^8.2.0",
+    "ethers": "^5.1.1",
+    "moment": "^2.29.1",
+    "node-fetch": "^2.6.1",
+    "pm2": "^4.5.6",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "eslint": "^7.12.1",
+    "eslint-config-prettier": "^6.15.0",
+    "http-server": "^0.12.3",
+    "husky": ">=4",
+    "lint-staged": ">=10",
+    "prettier": "^2.1.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "yarn test"
+    }
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.{js,css,md}": "prettier --write"
+  }
+}
