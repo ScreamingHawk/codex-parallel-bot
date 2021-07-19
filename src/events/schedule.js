@@ -16,7 +16,10 @@ const checkCardSales = async (bot, channel) => {
 	if (orders && orders.asset_events) {
 		log.debug(`Got ${orders.asset_events.length} orders`)
 		if (orders.asset_events.length > 0) {
-			//TODO Order by date
+
+			// Sort by date
+			orders.asset_events.sort((a, b) => moment(a.created_date).diff(moment(b.created_date)))
+
 			for (const event of orders.asset_events){
 				const { asset, payment_token } = event
 				const totalGwei = BigNumber.from(event.total_price)
