@@ -32,7 +32,7 @@ bot.on('ready', async () => {
 	// Initialise discord presence
 	initPresence(bot)
 	// Initialise listeners
-	initSchedules(channel)
+	initSchedules(bot, channel)
 	log.info('Codex initialised')
 
 	channel.send("Codex initialised")
