@@ -35,7 +35,7 @@ bot.on('ready', async () => {
 	initSchedules(bot, channel)
 	log.info('Codex initialised')
 
-	channel.send("Codex initialised")
+	// channel.send("Codex initialised")
 })
 
 bot.on('message', message => {
