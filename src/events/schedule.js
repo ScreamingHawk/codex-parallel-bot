@@ -23,8 +23,11 @@ const checkCardSales = async (bot, channel) => {
 			for (const event of orders.asset_events){
 				const { asset, payment_token } = event
 				const totalGwei = BigNumber.from(event.total_price)
-				const totalEther = formatEther(totalGwei)
-				const totalDollar = Number.parseFloat(totalEther) * payment_token.usd_price
+				const totalEther = totalGwei.mul(Number.parseFloat(payment_token.eth_price))
+				const totalDollar = Number.parseFloat(formatEther(totalEther)) * payment_token.usd_price
+				const quantity = Number.parseInt(event.quantity)
+				const s = quantity > 1 ? "s" : ""
+				const were = quantity > 1 ? "were" : "was"
 
 				// Embed
 				const embed = new Discord.MessageEmbed()
@@ -32,11 +35,17 @@ const checkCardSales = async (bot, channel) => {
 					.setColor(0x1890dc)
 					.setImage(asset.image_url)
 
-				embed.addField('Description', `${asset.name} was Purchased`, false)
+				embed.addField('Description', `${quantity} ${asset.name}${s} ${were} purchased`, false)
 
 				// Amounts
-				embed.addField('Ethereum', `Ξ${totalEther}`, true)
-				embed.addField('USD', `${formatDollar(totalDollar)}`, true)
+				if (quantity > 1) {
+					// Each
+					embed.addField('Ethereum', `Ξ${formatEther(totalEther)} (Ξ${formatEther(totalEther.div(quantity))} each)`, true)
+					embed.addField('USD', `${formatDollar(totalDollar)} (${formatDollar(totalDollar / quantity)} each)`, true)
+				} else {
+					embed.addField('Ethereum', `Ξ${formatEther(totalEther)}`, true)
+					embed.addField('USD', `${formatDollar(totalDollar)}`, true)
+				}
 
 				// Addresses
 				embed.addField('From', event.seller.address)
