@@ -33,7 +33,7 @@ bot.on('ready', async () => {
 	initPresence(bot)
 	// Initialise listeners
 	initSchedules(bot, channel)
-	log.info('Codex initialised')
+	log.info(`Codex initialised for channel ${CHANNEL_ID}`)
 
 	// channel.send("Codex initialised")
 })
