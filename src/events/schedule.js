@@ -22,6 +22,7 @@ const checkCardSales = async (bot, channel) => {
 
 			for (const event of orders.asset_events){
 				const { asset, payment_token } = event
+				//FIXME This might be wrong for non-eth valued token sales
 				const totalGwei = BigNumber.from(event.total_price)
 				const totalEther = totalGwei.mul(Number.parseFloat(payment_token.eth_price))
 				const totalDollar = Number.parseFloat(formatEther(totalEther)) * payment_token.usd_price
@@ -46,6 +47,7 @@ const checkCardSales = async (bot, channel) => {
 					embed.addField('Ethereum', `Ξ${formatEther(totalEther)}`, true)
 					embed.addField('USD', `${formatDollar(totalDollar)}`, true)
 				}
+				embed.addField('Sale Token', payment_token.symbol, true)
 
 				// Addresses
 				embed.addField('From', event.seller.address)
