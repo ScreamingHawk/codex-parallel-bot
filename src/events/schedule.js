@@ -21,7 +21,7 @@ const checkCardSales = async (bot, channel) => {
 			orders.asset_events.sort((a, b) => moment(a.created_date).diff(moment(b.created_date)))
 
 			for (const event of orders.asset_events){
-				const { asset, payment_token } = event
+				const { asset, payment_token, seller, winner_account } = event
 				//FIXME This might be wrong for non-eth valued token sales
 				const totalGwei = BigNumber.from(event.total_price)
 				const totalEther = totalGwei.mul(Number.parseFloat(payment_token.eth_price))
@@ -50,8 +50,10 @@ const checkCardSales = async (bot, channel) => {
 				embed.addField('Sale Token', payment_token.symbol, true)
 
 				// Addresses
-				embed.addField('From', event.seller.address)
-				embed.addField('To', event.winner_account.address)
+				const sellerName = seller.user?.username !== null ? ` (${seller.user.username})` : ''
+				const winnerName = winner_account.user?.username !== null ? ` (${winner_account.user.username})` : ''
+				embed.addField('From', `${seller.address}${sellerName}`)
+				embed.addField('To', `${winner_account.address}${winnerName}`)
 
 				embed.addField('Links', `View on [OpenSea](${asset.permalink})`, false)
 				embed.setFooter('Data provided by OpenSea', bot.user.displayAvatarURL())
