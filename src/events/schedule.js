@@ -50,8 +50,8 @@ const checkCardSales = async (bot, channel) => {
 				embed.addField('Sale Token', payment_token.symbol, true)
 
 				// Addresses
-				const sellerName = seller.user?.username !== null ? ` (${seller.user.username})` : ''
-				const winnerName = winner_account.user?.username !== null ? ` (${winner_account.user.username})` : ''
+				const sellerName = !seller.user?.username ? '' : ` (${seller.user.username})`
+				const winnerName = !winner_account.user?.username ? '' : ` (${winner_account.user.username})`
 				embed.addField('From', `${seller.address}${sellerName}`)
 				embed.addField('To', `${winner_account.address}${winnerName}`)
 
