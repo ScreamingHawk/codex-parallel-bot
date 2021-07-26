@@ -6,7 +6,8 @@ const openseaApi = require('../util/openseaApi')
 const { formatEther, formatEtherDollar } = require('../util/format')
 
 const CARD_CHECK_INTERVAL = 30 * 1000 // 30 sec
-let lastChecked = moment()
+let cardSalesInterval
+let lastChecked
 
 const checkCardSales = async (bot, channel) => {
 	log.debug('Running check card sales')
@@ -66,7 +67,11 @@ const checkCardSales = async (bot, channel) => {
 }
 
 const initSchedules = async (bot, channel) => {
-	setInterval(() => checkCardSales(bot, channel), CARD_CHECK_INTERVAL)
+	lastChecked = moment()
+	if (cardSalesInterval) {
+		clearInterval(cardSalesInterval)
+	}
+	cardSalesInterval = setInterval(() => checkCardSales(bot, channel), CARD_CHECK_INTERVAL)
 
 	log.info('Configured schedules')
 }

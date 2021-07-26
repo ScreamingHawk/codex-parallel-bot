@@ -22,12 +22,14 @@ if (!CHANNEL_ID) {
 	process.exit(1)
 }
 
+const getChannel = async () => await bot.channels.fetch(CHANNEL_ID)
+
 // Spin up bot
 const bot = new Discord.Client()
 bot.on('ready', async () => {
 	log.info('Discord login successful!')
 
-	const channel = await bot.channels.fetch(CHANNEL_ID)
+	const channel = getChannel()
 
 	// Initialise discord presence
 	initPresence(bot)
@@ -38,7 +40,7 @@ bot.on('ready', async () => {
 	// channel.send("Codex initialised")
 })
 
-bot.on('message', message => {
+bot.on('message', async message => {
 	// Ignore bots
 	if (message.author.bot) {
 		return
@@ -48,8 +50,18 @@ bot.on('message', message => {
 		return
 	}
 
+	// Listen only to admins
+	if (!message.member || !message.member.hasPermission('ADMINISTRATOR')){
+		return
+	}
+
 	if (message.content === "ping") {
 		message.channel.send("pong")
+	} else if (message.content === "restart" || message.content === "reboot") {
+		log.info("Rebooting...")
+		message.channel.send("Rebooting...")
+		initSchedules(bot, await getChannel())
+		message.channel.send("Rebooted")
 	}
 })
 
