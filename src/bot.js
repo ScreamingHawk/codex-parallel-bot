@@ -56,12 +56,12 @@ bot.on('message', async message => {
 	}
 
 	if (message.content === "ping") {
-		message.channel.send("pong")
+		message.channel.send("🏓 pong")
 	} else if (message.content === "restart" || message.content === "reboot") {
 		log.info("Rebooting...")
-		message.channel.send("Rebooting...")
+		message.channel.send("🔌 Rebooting...")
 		initSchedules(bot, await getChannel())
-		message.channel.send("Rebooted")
+		message.channel.send("🤖 Codex is now operational")
 	}
 })
 
