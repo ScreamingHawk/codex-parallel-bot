@@ -30,15 +30,16 @@ const bot = new Discord.Client()
 bot.on('ready', async () => {
 	log.info('Discord login successful!')
 
-	const channel = getChannel()
+	const channel = await getChannel()
+	log.info(`Codex initialised for channel ${CHANNEL_ID}`)
 
 	// Initialise discord presence
 	initPresence(bot)
 	// Initialise listeners
 	initSchedules(bot, channel)
-	log.info(`Codex initialised for channel ${CHANNEL_ID}`)
 
 	// channel.send("Codex initialised")
+	log.info(`Initialisation complete`)
 })
 
 bot.on('message', async message => {
