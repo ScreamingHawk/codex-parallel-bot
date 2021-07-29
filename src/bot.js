@@ -16,6 +16,7 @@ if (!TOKEN) {
 // Prepare env vars
 const {
 	CHANNEL_ID,
+	ADMIN_OVERRIDE,
 } = process.env
 if (!CHANNEL_ID) {
 	log.error('No channel ID. Exiting')
@@ -51,7 +52,8 @@ bot.on('message', async message => {
 	}
 
 	// Listen only to admins
-	if (!message.member || !message.member.hasPermission('ADMINISTRATOR')){
+	const { member } = message
+	if (!member || (!member.hasPermission('ADMINISTRATOR') && member.id !== ADMIN_OVERRIDE)){
 		return
 	}
 

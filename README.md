@@ -21,10 +21,10 @@ Copy the `.env.example` file to `.env` and populate the values as per below.
 Create a bot as per the [Discord bot documentation](https://discord.com/developers/docs/intro).
 Retrieve the bot token and set it as the value for `DISCORD_TOKEN`.
 
-Sign up for an [Infura](https://infura.io) project API key.
-Populate the `INFURA_PROJECT_ID` and `INFURA_PROJECT_SECRET` values.
-
 Set the `CHANNEL_ID` to the channel where notifications should appear.
+
+Populate the `ADMIN_OVERRIDE` value with a user id to allow a user to skip the admin check when interacting with the bot.
+This is useful if you don't have admin rights in the server the bot is in.
 
 ### Build
 
