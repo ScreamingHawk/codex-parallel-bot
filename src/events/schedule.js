@@ -27,7 +27,7 @@ const checkCardSales = async (bot, channel) => {
 
 					const totalGwei = BigNumber.from(event.total_price)
 					const totalEther = totalGwei.mul(Number.parseFloat(payment_token.eth_price))
-					const totalDollar = Number.parseFloat(formatEther(totalEther)) * payment_token.usd_price
+					const totalDollar = Number.parseFloat(formatEther(totalGwei)) * payment_token.usd_price
 					const quantity = Number.parseInt(event.quantity)
 					const s = quantity > 1 ? "s" : ""
 					const were = quantity > 1 ? "were" : "was"
