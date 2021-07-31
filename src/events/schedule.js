@@ -3,7 +3,7 @@ const moment = require('moment')
 const { BigNumber } = require('ethers')
 const log = require('../util/logger')
 const openseaApi = require('../util/openseaApi')
-const { formatEther, formatEtherDollar } = require('../util/format')
+const { formatEther, formatDollar } = require('../util/format')
 
 const CARD_CHECK_INTERVAL = 30 * 1000 // 30 sec
 let cardSalesInterval
@@ -24,10 +24,10 @@ const checkCardSales = async (bot, channel) => {
 			for (const event of orders.asset_events){
 				try {
 					const { asset, payment_token, seller, winner_account } = event
-					const usdPriceCents = Number.parseInt(Number.parseFloat(payment_token.usd_price) * 100)
+
 					const totalGwei = BigNumber.from(event.total_price)
 					const totalEther = totalGwei.mul(Number.parseFloat(payment_token.eth_price))
-					const totalDollar = totalGwei.mul(usdPriceCents).div(100)
+					const totalDollar = Number.parseFloat(formatEther(totalEther)) * payment_token.usd_price
 					const quantity = Number.parseInt(event.quantity)
 					const s = quantity > 1 ? "s" : ""
 					const were = quantity > 1 ? "were" : "was"
@@ -44,10 +44,10 @@ const checkCardSales = async (bot, channel) => {
 					if (quantity > 1) {
 						// Each
 						embed.addField('Ethereum', `Ξ${formatEther(totalEther)} (Ξ${formatEther(totalEther.div(quantity))} each)`, true)
-						embed.addField('USD', `${formatEtherDollar(totalDollar)} (${formatEtherDollar(totalDollar / quantity)} each)`, true)
+						embed.addField('USD', `${formatDollar(totalDollar)} (${formatDollar(totalDollar / quantity)} each)`, true)
 					} else {
 						embed.addField('Ethereum', `Ξ${formatEther(totalEther)}`, true)
-						embed.addField('USD', `${formatEtherDollar(totalDollar)}`, true)
+						embed.addField('USD', `${formatDollar(totalDollar)}`, true)
 					}
 					embed.addField('Sale Token', payment_token.symbol, true)
 
