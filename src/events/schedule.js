@@ -32,9 +32,9 @@ const checkCardSales = async (bot, channel) => {
 						let floor = null
 						const { sell_orders, traits, token_id } = card
 						if (sell_orders && sell_orders.length > 0) {
-							const { current_price, payment_token_contract } = sell_orders[0]
+							const { current_price, quantity, payment_token_contract } = sell_orders[0]
 							const floorGwei = BigNumber.from(current_price)
-							floor = floorGwei.mul(Number.parseFloat(payment_token_contract.eth_price))
+							floor = floorGwei.div(Number.parseFloat(quantity)).mul(Number.parseFloat(payment_token_contract.eth_price))
 						}
 						details[token_id] = {
 							floor,
