@@ -15,6 +15,7 @@
     "start": "pm2 start pm2.config.js",
     "logs": "pm2 logs Codex",
     "stop": "pm2 stop Codex",
+    "restart": "pm2 restart --update-env Codex",
     "delete": "pm2 delete Codex",
     "lint": "eslint **.js",
     "lint:fix": "eslint --fix **.js && prettier --write **.js"
