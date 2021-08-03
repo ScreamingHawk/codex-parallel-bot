@@ -1,3 +1,4 @@
+require('dotenv').config()
 const fetch = require('node-fetch')
 const log = require('./logger')
 const { CARD_CONTRACT } = require('./constants')
@@ -7,12 +8,15 @@ const OPENSEA_API = 'https://api.opensea.io/api/v1'
 
 const API_LIMIT = 5
 
+const { OPENSEA_API_KEY } = process.env
+const headers = OPENSEA_API_KEY ? {"X-API-KEY": OPENSEA_API_KEY } : {}
+
 const getCardUrl = id => `${OPENSEA_URL}/${CARD_CONTRACT}/${id}`
 
 const getCard = async id => {
 	const api = `${OPENSEA_API}/asset/${CARD_CONTRACT}/${id}`
 	log.debug(`Requesting ${api}`)
-	const res = await fetch(api)
+	const res = await fetch(api, {method: 'GET', headers})
 	return await res.json()
 }
 
@@ -23,7 +27,7 @@ const getCardOrders = async after => {
 		api += `&occurred_after=${after.unix()}`
 	}
 	log.debug(`Requesting ${api}`)
-	const res = await fetch(api)
+	const res = await fetch(api, {method: 'GET', headers})
 	return await res.json()
 }
 

@@ -23,6 +23,9 @@ Retrieve the bot token and set it as the value for `DISCORD_TOKEN`.
 
 Set the `CHANNEL_ID` to the channel where notifications should appear.
 
+Populate the `OPENSEA_API_KEY` with an API key [requested from OpenSea](https://docs.opensea.io/reference#request-an-api-key).
+This is optional, but recommended to avoid rate limiting.
+
 Populate the `ADMIN_OVERRIDE` value with a user id to allow a user to skip the admin check when interacting with the bot.
 This is useful if you don't have admin rights in the server the bot is in.
 
