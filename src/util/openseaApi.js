@@ -6,7 +6,7 @@ const { CARD_CONTRACT } = require('./constants')
 const OPENSEA_URL = 'https://opensea.io/assets'
 const OPENSEA_API = 'https://api.opensea.io/api/v1'
 
-const API_LIMIT = 5
+const API_LIMIT = 8
 
 const { OPENSEA_API_KEY } = process.env
 const headers = OPENSEA_API_KEY ? {"X-API-KEY": OPENSEA_API_KEY } : {}
