@@ -28,6 +28,7 @@ This is optional, but recommended to avoid rate limiting.
 
 Populate the `ADMIN_OVERRIDE` value with a user id to allow a user to skip the admin check when interacting with the bot.
 This is useful if you don't have admin rights in the server the bot is in.
+This also sends logs to the user when an error occurs.
 
 ### Build
 

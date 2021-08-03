@@ -44,7 +44,7 @@ const checkCardSales = async (bot, channel) => {
 				}
 			} catch (err) {
 				// Log and continue
-				log.error('Unable to get card details', err)
+				log.sendErr(bot, `Unable to get card details: ${err}`)
 			}
 
 			for (const event of orders.asset_events){
@@ -100,7 +100,7 @@ const checkCardSales = async (bot, channel) => {
 
 					channel.send({ embed })
 				} catch (err) {
-					log.error(err)
+					log.sendErr(bot, `Error reading sale: ${err}`)
 					channel.send(`⚠️ Error reading sale! Skipping it`)
 				}
 			}
