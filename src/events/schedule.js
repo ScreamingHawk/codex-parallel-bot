@@ -60,7 +60,7 @@ const checkCardSales = async (bot, channel) => {
 
 					// Embed
 					const embed = new Discord.MessageEmbed()
-						.setColor(0x1890dc)
+						.setColor(0x999999)
 
 					if (asset != null) {
 						embed.setTitle(`${asset.name}`)
