@@ -16,12 +16,21 @@ const log = createLogger({
 
 module.exports = log
 
-module.exports.sendErr = async (bot, err) => {
-	log.error(err)
+const sendToUser = async (bot, err) => {
 	if (bot && ADMIN_OVERRIDE) {
 		const user = await bot.users.fetch(ADMIN_OVERRIDE)
 		if (user) {
 			user.send(err)
 		}
 	}
+}
+
+module.exports.sendInfo = async (bot, err) => {
+	log.info(err)
+	await sendToUser(bot, err)
+}
+
+module.exports.sendErr = async (bot, err) => {
+	log.error(err)
+	await sendToUser(bot, err)
 }

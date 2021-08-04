@@ -31,7 +31,7 @@ bot.on('ready', async () => {
 	log.info('Discord login successful!')
 
 	const channel = await getChannel()
-	log.info(`Codex initialised for ${channel.guild?.name}'s ${channel.name}: ${CHANNEL_ID}`)
+	log.sendInfo(bot, `Codex initialised for ${channel.guild?.name}'s ${channel.name}: ${CHANNEL_ID}`)
 
 	// Initialise discord presence
 	initPresence(bot)
