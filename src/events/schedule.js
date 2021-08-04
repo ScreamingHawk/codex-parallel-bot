@@ -69,7 +69,7 @@ const checkCardSales = async (bot, channel) => {
 							embed.addField('Description', `${quantity} ${asset.name}${s} ${were} purchased`, false)
 					} else {
 						embed.setTitle(`Bundle was purchased`)
-						embed.addField('Description', asset_bundle.assets.map(ass => asset.name).join('\n'), false)
+						embed.addField('Items', asset_bundle.assets.map(ass => ass.name).join('\n'), false)
 					}
 
 
