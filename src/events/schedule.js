@@ -49,7 +49,7 @@ const checkCardSales = async (bot, channel) => {
 
 			for (const event of orders.asset_events){
 				try {
-					const { asset, payment_token, seller, winner_account } = event
+					const { asset, asset_bundle, payment_token, seller, winner_account } = event
 
 					const totalGwei = BigNumber.from(event.total_price)
 					const totalEther = totalGwei.mul(Number.parseFloat(payment_token.eth_price))
@@ -60,11 +60,18 @@ const checkCardSales = async (bot, channel) => {
 
 					// Embed
 					const embed = new Discord.MessageEmbed()
-						.setTitle(`${asset.name}`)
 						.setColor(0x1890dc)
-						.setImage(asset.image_url)
 
-					embed.addField('Description', `${quantity} ${asset.name}${s} ${were} purchased`, false)
+					if (asset != null) {
+						embed.setTitle(`${asset.name}`)
+							.setImage(asset.image_url)
+
+							embed.addField('Description', `${quantity} ${asset.name}${s} ${were} purchased`, false)
+					} else {
+						embed.setTitle(`Bundle was purchased`)
+						embed.addField('Description', asset_bundle.assets.map(ass => asset.name).join('\n'), false)
+					}
+
 
 					// Amounts
 					if (quantity > 1) {
@@ -77,7 +84,7 @@ const checkCardSales = async (bot, channel) => {
 					}
 					embed.addField('Sale Token', payment_token.symbol, true)
 
-					if (details[asset.token_id]) {
+					if (asset && details[asset.token_id]) {
 						const { floor, parallel } = details[asset.token_id]
 						if (floor) {
 							// Floor
@@ -95,7 +102,9 @@ const checkCardSales = async (bot, channel) => {
 					embed.addField('From', `${seller.address}${sellerName}`)
 					embed.addField('To', `${winner_account.address}${winnerName}`)
 
-					embed.addField('Links', `View on [OpenSea](${asset.permalink})`, false)
+					if (asset != null) {
+						embed.addField('Links', `View on [OpenSea](${asset.permalink})`, false)
+					}
 					embed.setFooter('Data provided by OpenSea', bot.user.displayAvatarURL())
 
 					channel.send({ embed })
