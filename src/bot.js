@@ -16,6 +16,7 @@ if (!TOKEN) {
 // Prepare env vars
 const {
 	CHANNEL_ID,
+	PS15_CHANNEL_ID,
 	ADMIN_OVERRIDE,
 } = process.env
 if (!CHANNEL_ID) {
@@ -23,22 +24,16 @@ if (!CHANNEL_ID) {
 	process.exit(1)
 }
 
-const getChannel = async () => await bot.channels.fetch(CHANNEL_ID)
-
 // Spin up bot
 const bot = new Discord.Client()
 bot.on('ready', async () => {
 	log.info('Discord login successful!')
 
-	const channel = await getChannel()
-	log.sendInfo(bot, `Codex initialised for ${channel.guild?.name}'s ${channel.name}: ${CHANNEL_ID}`)
-
 	// Initialise discord presence
 	initPresence(bot)
 	// Initialise listeners
-	initSchedules(bot, channel)
+	initSchedules(bot)
 
-	// channel.send("Codex initialised")
 	log.info(`Initialisation complete`)
 })
 
@@ -48,7 +43,8 @@ bot.on('message', async message => {
 		return
 	}
 	// Listen only to channel
-	if (!message.channel || message.channel.id !== CHANNEL_ID) {
+	if (!message.channel || 
+			(message.channel.id !== CHANNEL_ID && message.channel.id !== PS15_CHANNEL_ID)) {
 		return
 	}
 
@@ -63,7 +59,7 @@ bot.on('message', async message => {
 	} else if (message.content === "restart" || message.content === "reboot") {
 		log.info("Rebooting...")
 		message.channel.send("🔌 Rebooting...")
-		initSchedules(bot, await getChannel())
+		initSchedules(bot)
 		message.channel.send("🤖 Codex is now operational")
 	}
 })

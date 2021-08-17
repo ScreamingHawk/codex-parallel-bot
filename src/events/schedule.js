@@ -1,16 +1,19 @@
+require('dotenv').config()
 const Discord = require('discord.js')
 const moment = require('moment')
 const { BigNumber } = require('ethers')
 const log = require('../util/logger')
 const openseaApi = require('../util/openseaApi')
 const { formatEther, formatDollar } = require('../util/format')
-const { PARALLEL_COLORS } = require('../util/constants')
+const { PARALLEL_COLORS, PS15 } = require('../util/constants')
+
+const { CHANNEL_ID, PS15_CHANNEL_ID } = process.env
 
 const CARD_CHECK_INTERVAL = 30 * 1000 // 30 sec
 let cardSalesInterval
 let lastChecked
 
-const checkCardSales = async (bot, channel) => {
+const checkCardSales = async (bot, channel, ps15Channel) => {
 	log.debug('Running check card sales')
 
 	const newNow = moment()
@@ -107,7 +110,11 @@ const checkCardSales = async (bot, channel) => {
 					}
 					embed.setFooter('Data provided by OpenSea', bot.user.displayAvatarURL())
 
-					channel.send({ embed })
+					if (PS15.indexOf(asset?.name) > -1) {
+						ps15Channel.send({ embed })
+					} else {
+						channel.send({ embed })
+					}
 				} catch (err) {
 					log.sendErr(bot, `Error reading sale: ${err}`)
 				}
@@ -117,12 +124,18 @@ const checkCardSales = async (bot, channel) => {
 	}
 }
 
-const initSchedules = async (bot, channel) => {
+const initSchedules = async bot => {
+
+	const channel = await bot.channels.fetch(CHANNEL_ID)
+	const ps15Channel = await bot.channels.fetch(PS15_CHANNEL_ID || CHANNEL_ID)
+	log.sendInfo(bot, `Codex initialised for ${channel.guild?.name}'s ${channel.name}: ${CHANNEL_ID}`)
+	log.sendInfo(bot, `Codex initialised for PS15 ${ps15Channel.guild?.name}'s ${ps15Channel.name}: ${PS15_CHANNEL_ID}`)
+
 	lastChecked = moment()
 	if (cardSalesInterval) {
 		clearInterval(cardSalesInterval)
 	}
-	cardSalesInterval = setInterval(() => checkCardSales(bot, channel), CARD_CHECK_INTERVAL)
+	cardSalesInterval = setInterval(() => checkCardSales(bot, channel, ps15Channel), CARD_CHECK_INTERVAL)
 
 	log.info('Configured schedules')
 }

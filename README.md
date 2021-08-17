@@ -22,6 +22,7 @@ Create a bot as per the [Discord bot documentation](https://discord.com/develope
 Retrieve the bot token and set it as the value for `DISCORD_TOKEN`.
 
 Set the `CHANNEL_ID` to the channel where notifications should appear.
+Set the `PS15_CHANNEL_ID` to the channel where notifications of PS15 SE cards should appear.
 
 Populate the `OPENSEA_API_KEY` with an API key [requested from OpenSea](https://docs.opensea.io/reference#request-an-api-key).
 This is optional, but recommended to avoid rate limiting.
