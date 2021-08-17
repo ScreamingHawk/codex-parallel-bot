@@ -110,7 +110,6 @@ const checkCardSales = async (bot, channel) => {
 					channel.send({ embed })
 				} catch (err) {
 					log.sendErr(bot, `Error reading sale: ${err}`)
-					channel.send(`⚠️ Error reading sale! Skipping it`)
 				}
 			}
 			lastChecked = newNow
