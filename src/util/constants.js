@@ -26,5 +26,6 @@ module.exports = {
 		"The Priming",
 		"Prime Key",
 		"Catalyst Drive",
+		"Galaxy Key",
 	],
 }
