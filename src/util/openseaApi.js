@@ -1,7 +1,7 @@
 require('dotenv').config()
 const fetch = require('node-fetch')
 const log = require('./logger')
-const { CARD_CONTRACT } = require('./constants')
+const { CARD_CONTRACT, OPENSEA_SLUG } = require('./constants')
 
 const OPENSEA_URL = 'https://opensea.io/assets'
 const OPENSEA_API = 'https://api.opensea.io/api/v1'
@@ -25,7 +25,7 @@ const getCard = async id => {
 }
 
 const getCardEvents = async after => {
-	let api = `${OPENSEA_API}/events?asset_contract_address=${CARD_CONTRACT}&event_type=successful&limit=${API_LIMIT}`
+	let api = `${OPENSEA_API}/events?collection_slug=${OPENSEA_SLUG}&event_type=successful&limit=${API_LIMIT}`
 	if (after) {
 		// Add unix timestamp
 		api += `&occurred_after=${after.unix()}`

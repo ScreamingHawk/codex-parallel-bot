@@ -1,5 +1,6 @@
 module.exports = {
 	CARD_CONTRACT: '0x76be3b62873462d2142405439777e971754e8e77',
+	OPENSEA_SLUG: 'parallelalpha',
 	PARALLEL_COLORS: {
 		'Augencore': 0xF26D15,
 		'Marcolian': 0xEE0D0D,
