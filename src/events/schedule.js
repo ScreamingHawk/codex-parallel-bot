@@ -36,7 +36,7 @@ const checkCardSales = async (bot, channel, ps15Channel) => {
 						const { sell_orders, traits, token_id } = card
 						if (sell_orders && sell_orders.length > 0) {
 							const { current_price, quantity, payment_token_contract } = sell_orders[0]
-							const floorGwei = BigNumber.from(current_price)
+							const floorGwei = BigNumber.from(current_price.split('.')[0])
 							floor = floorGwei.div(Number.parseFloat(quantity)).mul(Number.parseFloat(payment_token_contract.eth_price))
 						}
 						details[token_id] = {
@@ -136,6 +136,7 @@ const initSchedules = async bot => {
 		clearInterval(cardSalesInterval)
 	}
 	cardSalesInterval = setInterval(() => checkCardSales(bot, channel, ps15Channel), CARD_CHECK_INTERVAL)
+	checkCardSales(bot, channel, ps15Channel) // Run it now
 
 	log.info('Configured schedules')
 }
