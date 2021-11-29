@@ -28,5 +28,6 @@ module.exports = {
 		"Prime Key",
 		"Catalyst Drive",
 		"Galaxy Key",
+		"Overclock Key",
 	],
 }
