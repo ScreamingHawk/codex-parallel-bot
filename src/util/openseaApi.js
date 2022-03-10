@@ -1,12 +1,11 @@
 require('dotenv').config()
 const fetch = require('node-fetch')
+const moment = require('moment')
 const log = require('./logger')
 const { CARD_CONTRACT, OPENSEA_SLUG } = require('./constants')
 
 const OPENSEA_URL = 'https://opensea.io/assets'
 const OPENSEA_API = 'https://api.opensea.io/api/v1'
-
-const API_LIMIT = 15
 
 const { OPENSEA_API_KEY } = process.env
 const headers = OPENSEA_API_KEY ? {"X-API-KEY": OPENSEA_API_KEY } : {}
@@ -24,13 +23,21 @@ const getCard = async id => {
 	return await makeRequest(api)
 }
 
-const getCardEvents = async after => {
-	let api = `${OPENSEA_API}/events?collection_slug=${OPENSEA_SLUG}&event_type=successful&limit=${API_LIMIT}`
-	if (after) {
-		// Add unix timestamp
-		api += `&occurred_after=${after.unix()}`
+const filterEvents = (results, after) => {
+	let events = []
+	if (results && results.asset_events) {
+		if (after) {
+			// Filter by time
+			events = results.asset_events.filter(e => moment.utc(e.created_date) > after)
+		}
 	}
-	return await makeRequest(api)
+	return events
+}
+
+const getCardEvents = async after => {
+	const api = `${OPENSEA_API}/events?collection_slug=${OPENSEA_SLUG}&event_type=successful`
+	const results = await makeRequest(api)
+	return filterEvents(results, after)
 }
 
 const getCardDetails = async cardIds => {
